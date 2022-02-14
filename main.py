@@ -10,8 +10,8 @@ from openpyxl import Workbook
 from xlwt import Workbook as Wbk
 
 
-def make_wezwanie(dic, sheet_name, ind):
-    document = Document('wezwanie.docx')
+def make_letter(dic, sheet_name, ind):
+    document = Document('letter.docx')
     todays_date = datetime.date.today()
     todays_date = todays_date.strftime("%d.%m.%Y")
     for p in document.paragraphs:
@@ -103,7 +103,7 @@ def main():
     xls = pd.ExcelFile('dane.xlsx')
     sheet_nam = xls.sheet_names
 
-    count = int(input("Podaj ile wezwań chcesz wygenerować: \n"))
+    count = int(input("How many letters you want to generate: \n"))
     book = Workbook("dane_kopia.xlsx")
     book.save("dane_kopia.xlsx")
     book.close()
@@ -116,7 +116,7 @@ def main():
             if pd.isna(j.nazwa) or pd.isna(j._3) or pd.isna(j._4) or pd.isna(j._5) or pd.isna(
                     j._6) or pd.isna(j._12) or pd.isna(j._14):
                 continue
-            if (j.Wygenerowano == 'nie') and iterator < count:
+            if (j.generated == 'nie') and iterator < count:
                 if type(j._7) == str:
                     nr_lok = j._7
                 else:
@@ -154,8 +154,8 @@ def main():
                     '5!': kwota_dodatkowa,  # roszczenie +10
                     'ind': str(j.Index + 1),
                 }
-                make_wezwanie(dic, str(i), str(j.Index + 1))
-                df.loc[j.Index, "Wygenerowano"] = 'tak'
+                make_letter(dic, str(i), str(j.Index + 1))
+                df.loc[j.Index, "generated"] = 'tak'
                 addresseeList.append((reverseName(imie_nazwisko), nazwa_ulicy, str(j._6), nr_lok[1:], join_name(kod.split('-')), miejscowosc, 'Polska'))
                 iterator += 1
 
